@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz System</title>
+<style>
+body { font-family: Arial; text-align: center; background: #f2f2f2; }
+.container { width: 400px; margin: auto; padding: 20px; background: white; border-radius: 10px; }
+button { padding: 10px; margin-top: 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Quiz System</h2>
+
+<div id="quiz"></div>
+<button onclick="nextQuestion()">Next</button>
+
+<h3 id="score"></h3>
+</div>
+
+<script>
+// Questions (Database simulation)
+const questions = [
+  { q: "HTML stands for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyper Tool Multi Language"], answer: 0 },
+  { q: "CSS is used for?", options: ["Styling", "Programming", "Database"], answer: 0 },
+  { q: "JavaScript is?", options: ["Programming Language", "Markup Language", "Database"], answer: 0 }
+];
+
+let index = 0;
+let score = 0;
+
+// Load question
+function loadQuestion() {
+  let q = questions[index];
+  let html = "<h3>" + q.q + "</h3>";
+  
+  q.options.forEach((opt, i) => {
+    html += `<input type="radio" name="opt" value="${i}"> ${opt}<br>`;
+  });
+
+  document.getElementById("quiz").innerHTML = html;
+}
+
+// Next question
+function nextQuestion() {
+  let options = document.getElementsByName("opt");
+  let selected = -1;
+
+  options.forEach((opt, i) => {
+    if(opt.checked) selected = i;
+  });
+
+  if(selected === questions[index].answer) score++;
+
+  index++;
+
+  if(index < questions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById("quiz").innerHTML = "Quiz Completed!";
+    document.getElementById("score").innerHTML = "Score: " + score;
+
+    // Store score in localStorage (database simulation)
+    localStorage.setItem("quizScore", score);
+  }
+}
+
+// Initial load
+loadQuestion();
+</script>
+
+</body>
+</html>
